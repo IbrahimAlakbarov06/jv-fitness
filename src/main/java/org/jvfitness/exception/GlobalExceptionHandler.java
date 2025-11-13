@@ -34,6 +34,39 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder()
+                .uuid(UUID.randomUUID())
+                .message(e.getMessage())
+                .error("Business Logic Error")
+                .timestamp(LocalDateTime.now())
+                .build()
+        );
+    }
+
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleEmailException(EmailException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder()
+                .uuid(UUID.randomUUID())
+                .message(e.getMessage())
+                .error("Email Error Happened")
+                .timestamp(LocalDateTime.now())
+                .build()
+        );
+    }
+
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidInputException(InvalidInputException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder()
+                .uuid(UUID.randomUUID())
+                .message(e.getMessage())
+                .error("Invalid Input Exception")
+                .timestamp(LocalDateTime.now())
+                .build()
+        );
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder()
