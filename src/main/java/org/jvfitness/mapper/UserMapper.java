@@ -5,6 +5,9 @@ import org.jvfitness.model.dto.request.RegisterRequest;
 import org.jvfitness.model.dto.response.UserResponse;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class UserMapper {
 
@@ -33,5 +36,15 @@ public class UserMapper {
                 .email(request.getEmail())
                 .phoneNumber(request.getPhoneNumber())
                 .build();
+    }
+
+    public List<UserResponse> toListResponse(List<User> users) {
+        if (users == null) {
+            return null;
+        }
+
+        return users.stream()
+                .map(this::toUserResponse)
+                .collect(Collectors.toList());
     }
 }
