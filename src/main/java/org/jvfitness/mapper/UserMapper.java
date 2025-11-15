@@ -2,6 +2,7 @@ package org.jvfitness.mapper;
 
 import org.jvfitness.domain.entity.User;
 import org.jvfitness.model.dto.request.RegisterRequest;
+import org.jvfitness.model.dto.request.UpdateUserRequest;
 import org.jvfitness.model.dto.response.UserResponse;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +37,20 @@ public class UserMapper {
                 .email(request.getEmail())
                 .phoneNumber(request.getPhoneNumber())
                 .build();
+    }
+
+    public void updateUserFromRequest(User user, UpdateUserRequest request) {
+        if (request.getFirstName() != null && !request.getFirstName().isBlank()) {
+            user.setFirstName(request.getFirstName());
+        }
+
+        if (request.getLastName() != null && !request.getLastName().isBlank()) {
+            user.setLastName(request.getLastName());
+        }
+
+        if (request.getPhoneNumber() != null && !request.getPhoneNumber().isBlank()) {
+            user.setPhoneNumber(request.getPhoneNumber());
+        }
     }
 
     public List<UserResponse> toListResponse(List<User> users) {

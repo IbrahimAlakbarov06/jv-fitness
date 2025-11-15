@@ -7,9 +7,11 @@ import org.jvfitness.domain.entity.User;
 import org.jvfitness.domain.repository.BranchRepository;
 import org.jvfitness.domain.repository.TrainerRepository;
 import org.jvfitness.domain.repository.UserRepository;
+import org.jvfitness.exception.AlreadyExistsException;
 import org.jvfitness.exception.BusinessException;
 import org.jvfitness.exception.NotFoundException;
 import org.jvfitness.mapper.UserMapper;
+import org.jvfitness.model.dto.request.UpdateUserRequest;
 import org.jvfitness.model.dto.response.MessageResponse;
 import org.jvfitness.model.dto.response.UserResponse;
 import org.jvfitness.model.enums.Role;
@@ -94,6 +96,26 @@ public class UserService {
         userRepository.delete(user);
 
         return new MessageResponse("User deleted successfully");
+    }
+
+    @Transactional
+    public UserResponse updateUser(Long id, UpdateUserRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not found with id: " + id));
+
+        if (request.getPhoneNumber() != null &&
+                !request.getPhoneNumber().isBlank() &&
+                !request.getPhoneNumber().equals(user.getPhoneNumber())) {
+
+            if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+                throw new AlreadyExistsException("Phone number already exists: " + request.getPhoneNumber());
+            }
+        }
+
+        userMapper.updateUserFromRequest(user, request);
+
+        User updatedUser = userRepository.save(user);
+        return userMapper.toUserResponse(updatedUser);
     }
 
     @Transactional
