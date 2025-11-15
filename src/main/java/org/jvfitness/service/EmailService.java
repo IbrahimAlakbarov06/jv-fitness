@@ -1,14 +1,13 @@
 package org.jvfitness.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.jvfitness.exception.EmailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class EmailService {
 
     private final JavaMailSender mailSender;
@@ -30,7 +29,7 @@ public class EmailService {
 
             mailSender.send(message);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to send verification email", e);
+            throw new EmailException("Failed to send verification email");
         }
     }
 
@@ -52,7 +51,7 @@ public class EmailService {
 
             mailSender.send(message);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to send password reset email", e);
+            throw new EmailException("Failed to send password reset email");
         }
     }
 
@@ -71,8 +70,8 @@ public class EmailService {
             ));
 
             mailSender.send(message);
-            log.info("Welcome email sent to: {}", to);
         } catch (Exception e) {
+            throw new EmailException("Failed to send welcome email");
         }
     }
 }

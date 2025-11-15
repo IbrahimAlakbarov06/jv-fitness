@@ -1,4 +1,4 @@
-package org.jvfitness.domain.config;
+package org.jvfitness.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
